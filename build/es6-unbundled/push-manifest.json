@@ -1,0 +1,12 @@
+{
+  "index.html": {
+    "node_modules/myscript-text-web/src/demo-app/examples/examples.css": {
+      "type": "style",
+      "weight": 1
+    },
+    "node_modules/%40webcomponents/webcomponentsjs/webcomponents-loader.js": {
+      "type": "script",
+      "weight": 1
+    }
+  }
+}

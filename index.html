@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Those meta make the capture of handwriting inputs easier on mobile devices -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="true"/>
+
+    <title>Handle exports</title>
+
+    <link rel="stylesheet" href="node_modules/myscript-text-web/src/demo-app/examples/examples.css">
+
+    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script type="module" src="node_modules/myscript-text-web/myscript-text-web.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- Please change applicationkey and hmackey below with those send by mail during your registration. You can re-access them by connecting to your dashboard at developer.myscript.com with your myscript account -->
+<nav>
+    <button class="classic-btn" onclick="myscriptTextWeb.undo()">undo</button>
+    <button class="classic-btn" onclick="myscriptTextWeb.redo()">redo</button>
+    <button class="classic-btn" onclick="myscriptTextWeb.clear()">clear</button>
+    <button class="classic-btn" onclick="myscriptTextWeb.export_()">recognize</button>
+    <button class="classic-btn" onclick="myscriptTextWeb.convert()">convert</button>
+</nav>
+<myscript-text-web scheme="https"
+                   host="webdemoapi.myscript.com"
+                   applicationKey='5967e3b4-3b59-442c-b645-13798ade6174'
+                   hmacKey='e0ff971c-10b9-4dfe-9c81-b4a0ed53394f'
+                   ondemand
+                   disablecontrols
+                   touch-action="none">            
+</myscript-text-web>
+<div class="toast"></div>
+<script>
+    const toast = document.querySelector('.toast');
+    // document.querySelector('myscript-text-web').addEventListener('exported', function (event) {
+    //     //var input = None;
+    //     //input = toast.textContent = `Recognition object contains : ${JSON.stringify(event.detail)}`;
+    //     toast.textContent = `Recognition object contains : ${JSON.stringify(event.detail)}`;
+    //     //input = toast.textContent;
+    //     var json = JSON.parse(JSON.stringify(event.detail));
+    //     var exports = json.exports;
+    //     var bs = JSON.parse(exports["application/vnd.myscript.jiix"]);
+    //     var myThing = bs["label"];
+    //     alert(myThing);
+    // });
+    const myscriptTextWeb = document.querySelector('myscript-text-web');
+    // myscriptTextWeb.addEventListener('converted', () => {
+    //     // alert(JSON.stringify(event.detail));
+    //     // alert("hey");
+    // });
+    myscriptTextWeb.addEventListener('exported', (event) => {
+        toast.textContent = `Recognition object contains : ${JSON.stringify(event.detail)}`;
+        var json = JSON.parse(JSON.stringify(event.detail));
+        var exports = json.exports;
+        var bs = JSON.parse(exports["application/vnd.myscript.jiix"]);
+        var myThing = bs["label"];
+        alert(myThing);
+        connectToChecker(myThing);
+
+        //var url = "https://checkerws.herokuapp.com/?input=" +  myThing;
+        /*
+        var url = "localhost:9000/?input=" +  myThing;
+        alert(url)
+		var client = createCORSRequest('POST', url);
+		alert(client.responseText)
+
+		if (!client) {
+		  throw new Error('CORS not supported');
+		}
+		*/
+
+	        // alert("hey");
+	        // alert(event.detail.isEmpty);
+	});
+
+
+
+    function connectToChecker(inputCode)
+    {
+    	
+    	//var url = "https://checkerws.herokuapp.com";
+
+    	/*
+    	var url = "https://127.0.0.1:9000/"
+		//var representationOfDesiredState = "The cheese is old and moldy, where is the bathroom?";
+
+		var client = new XMLHttpRequest();
+
+		client.open("POST", url, false);
+
+
+		client.setRequestHeader("Content-Type", "application/xml");
+
+		client.send(inputCode);
+
+		if (client.status == 200)
+		    alert("The request succeeded!\n\nThe response representation was:\n\n" + client.responseText)
+		else
+		    alert("The request did not succeed!\n\nThe response status was: " + client.status + " " + client.statusText + ".")
+		
+		*/
+        alert("outside:" +inputCode);
+
+		$.ajax({
+		    //url: 'https://checkerws.herokuapp.com/?input=public class',
+            url: 'https://checkerws.herokuapp.com/?input='+inputCode,
+		    //url: 'http://127.0.0.1:9000/',
+		    type: 'POST',
+		    //data: '?input=' + inputCode, // or $('#myform').serializeArray()
+		    crossDomain: false,
+
+		    beforeSend: function(client){
+		    	client.withCredentials = true;
+		    },
+
+		    success: function(result, status, jqXHR) { 
+                alert("INSIDE: " + inputCode);
+                alert("Got it!: " + result);
+            },
+
+		    error: function (request, status, error) {
+		        alert(status);
+		    }
+		});
+		
+
+    }
+
+    function createCORSRequest(method, url) {
+	  var xhr = new XMLHttpRequest();
+	  if ("withCredentials" in xhr) {
+
+	    // Check if the XMLHttpRequest object has a "withCredentials" property.
+	    // "withCredentials" only exists on XMLHTTPRequest2 objects.
+	    xhr.open(method, url, true);
+	    alert(xhr.response)
+
+	  } else if (typeof XDomainRequest != "undefined") {
+
+	    // Otherwise, check if XDomainRequest.
+	    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+	    xhr = new XDomainRequest();
+	    xhr.open(method, url);
+
+	     alert("Hates Pedro")
+
+	  } else {
+
+	    // Otherwise, CORS is not supported by the browser.
+	    xhr = null;
+
+	  }
+	  return xhr;
+	}
+
+    // myscriptTextWeb.addEventListener('convert', () => {
+    //     alert(JSON.stringify(event.detail));
+    //     // alert("hey");
+    // });
+    // myscriptTextWeb.addEventListener('converted', (event) => {
+    //     toast.textContent = `Recognition object contains : ${JSON.stringify(event.detail)}`;
+    //     var json = JSON.parse(JSON.stringify(event.detail));
+    //     var exports = json.exports;
+    //     var bs = JSON.parse(exports["application/vnd.myscript.jiix"]);
+    //     var myThing = bs["label"];
+    //     alert(myThing);
+    // });
+</script>
+</body>
+
+</html>
