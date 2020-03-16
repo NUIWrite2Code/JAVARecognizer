@@ -9,7 +9,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="HandheldFriendly" content="true"/>
 
-    <title>Write2Code - A Java HandCode Recognizer</title>
+    <title>Write2Code</title>
 
     <link rel="stylesheet" href="node_modules/myscript-text-web/src/demo-app/examples/examples.css">
 
@@ -20,13 +20,16 @@
 
 <body>
 <!-- Please change applicationkey and hmackey below with those send by mail during your registration. You can re-access them by connecting to your dashboard at developer.myscript.com with your myscript account -->
+<h1>Write2Code - A Java Handwritten-Code Recognizer</h1>
+<p><b>Use the canvas to write a JAVA method that receives two numbers, x and y, and returns the division of them (x divided by y)</b></p>
 <nav>
-    <button class="classic-btn" onclick="myscriptTextWeb.undo()">undo</button>
-    <button class="classic-btn" onclick="myscriptTextWeb.redo()">redo</button>
-    <button class="classic-btn" onclick="myscriptTextWeb.clear()">clear</button>
-    <button class="classic-btn" onclick="myscriptTextWeb.export_()">recognize</button>
-    <button class="classic-btn" onclick="myscriptTextWeb.convert()">convert</button>
+    <button class="classic-btn" onclick="myscriptTextWeb.undo()">Undo</button>
+    <button class="classic-btn" onclick="myscriptTextWeb.redo()">Redo</button>
+    <button class="classic-btn" onclick="myscriptTextWeb.clear()">Clear</button>
+    <button class="classic-btn" onclick="myscriptTextWeb.export_()">Recognize</button>
+    <button class="classic-btn" onclick="myscriptTextWeb.convert()">Digitalize</button>
 </nav>
+<h2>&nbsp;</h2>
 <myscript-text-web scheme="https"
                    host="webdemoapi.myscript.com"
                    applicationKey='5967e3b4-3b59-442c-b645-13798ade6174'
@@ -35,9 +38,9 @@
                    disablecontrols
                    touch-action="none">            
 </myscript-text-web>
-<div class="toast"></div>
+<!--div class="toast"></div-->
 <script>
-    const toast = document.querySelector('.toast');
+    //const toast = document.querySelector('.toast');
     // document.querySelector('myscript-text-web').addEventListener('exported', function (event) {
     //     //var input = None;
     //     //input = toast.textContent = `Recognition object contains : ${JSON.stringify(event.detail)}`;
@@ -55,12 +58,12 @@
     //     // alert("hey");
     // });
     myscriptTextWeb.addEventListener('exported', (event) => {
-        toast.textContent = `Recognition object contains : ${JSON.stringify(event.detail)}`;
+        //toast.textContent = `Recognition object contains : ${JSON.stringify(event.detail)}`;
         var json = JSON.parse(JSON.stringify(event.detail));
         var exports = json.exports;
         var bs = JSON.parse(exports["application/vnd.myscript.jiix"]);
         var myThing = bs["label"];
-        alert(myThing);
+        //alert(myThing);
         connectToChecker(myThing);
 
         //var url = "https://checkerws.herokuapp.com/?input=" +  myThing;
@@ -105,7 +108,7 @@
 		    alert("The request did not succeed!\n\nThe response status was: " + client.status + " " + client.statusText + ".")
 		
 		*/
-        alert("outside:" +inputCode);
+        //alert("outside:" +inputCode);
 
 		$.ajax({
 		    //url: 'https://checkerws.herokuapp.com/?input=public class',
@@ -120,8 +123,8 @@
 		    },
 
 		    success: function(result, status, jqXHR) { 
-                alert("INSIDE: " + inputCode);
-                alert("Got it!: " + result);
+                //alert("INSIDE: " + inputCode);
+                alert("Here is your feedback: \n" + result);
             },
 
 		    error: function (request, status, error) {
