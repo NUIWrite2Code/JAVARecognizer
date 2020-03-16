@@ -21,13 +21,14 @@
 <body>
 <!-- Please change applicationkey and hmackey below with those send by mail during your registration. You can re-access them by connecting to your dashboard at developer.myscript.com with your myscript account -->
 <h1>Write2Code - A Java Handwritten-Code Recognizer</h1>
-<p><b>Use the canvas to write a JAVA method that receives two numbers, x and y, and returns the division of them (x divided by y)</b></p>
+<p><b>Use the canvas to write a JAVA method that receives two integer numbers, x and y, and returns the division of them (x divided by y)</b></p>
 <nav>
     <button class="classic-btn" onclick="myscriptTextWeb.undo()">Undo</button>
     <button class="classic-btn" onclick="myscriptTextWeb.redo()">Redo</button>
     <button class="classic-btn" onclick="myscriptTextWeb.clear()">Clear</button>
-    <button class="classic-btn" onclick="myscriptTextWeb.export_()">Recognize</button>
+    <button class="classic-btn" onclick="myscriptTextWeb.export_()">Recognize</button> <!-- Give feedback to the user on its code and how recognizable it is (?) -->
     <button class="classic-btn" onclick="myscriptTextWeb.convert()">Digitalize</button>
+    <button class="classic-btn" onclick="connectToChecker()">Check</button> <!-- Send this to the checker WS -->
 </nav>
 <h2>&nbsp;</h2>
 <myscript-text-web scheme="https"
@@ -38,78 +39,24 @@
                    disablecontrols
                    touch-action="none">            
 </myscript-text-web>
-<!--div class="toast"></div-->
+
 <script>
-    //const toast = document.querySelector('.toast');
-    // document.querySelector('myscript-text-web').addEventListener('exported', function (event) {
-    //     //var input = None;
-    //     //input = toast.textContent = `Recognition object contains : ${JSON.stringify(event.detail)}`;
-    //     toast.textContent = `Recognition object contains : ${JSON.stringify(event.detail)}`;
-    //     //input = toast.textContent;
-    //     var json = JSON.parse(JSON.stringify(event.detail));
-    //     var exports = json.exports;
-    //     var bs = JSON.parse(exports["application/vnd.myscript.jiix"]);
-    //     var myThing = bs["label"];
-    //     alert(myThing);
-    // });
+    
     const myscriptTextWeb = document.querySelector('myscript-text-web');
-    // myscriptTextWeb.addEventListener('converted', () => {
-    //     // alert(JSON.stringify(event.detail));
-    //     // alert("hey");
-    // });
+    var myThing;
+
     myscriptTextWeb.addEventListener('exported', (event) => {
-        //toast.textContent = `Recognition object contains : ${JSON.stringify(event.detail)}`;
         var json = JSON.parse(JSON.stringify(event.detail));
         var exports = json.exports;
         var bs = JSON.parse(exports["application/vnd.myscript.jiix"]);
-        var myThing = bs["label"];
-        //alert(myThing);
-        connectToChecker(myThing);
-
-        //var url = "https://checkerws.herokuapp.com/?input=" +  myThing;
-        /*
-        var url = "localhost:9000/?input=" +  myThing;
-        alert(url)
-		var client = createCORSRequest('POST', url);
-		alert(client.responseText)
-
-		if (!client) {
-		  throw new Error('CORS not supported');
-		}
-		*/
-
-	        // alert("hey");
-	        // alert(event.detail.isEmpty);
+        myThing = bs["label"];
+        //connectToChecker(myThing);
 	});
 
 
-
-    function connectToChecker(inputCode)
+    function connectToChecker()
     {
-    	
-    	//var url = "https://checkerws.herokuapp.com";
-
-    	/*
-    	var url = "https://127.0.0.1:9000/"
-		//var representationOfDesiredState = "The cheese is old and moldy, where is the bathroom?";
-
-		var client = new XMLHttpRequest();
-
-		client.open("POST", url, false);
-
-
-		client.setRequestHeader("Content-Type", "application/xml");
-
-		client.send(inputCode);
-
-		if (client.status == 200)
-		    alert("The request succeeded!\n\nThe response representation was:\n\n" + client.responseText)
-		else
-		    alert("The request did not succeed!\n\nThe response status was: " + client.status + " " + client.statusText + ".")
-		
-		*/
-        //alert("outside:" +inputCode);
-
+        var inputCode = myThing;
 		$.ajax({
 		    //url: 'https://checkerws.herokuapp.com/?input=public class',
             url: 'https://checkerws.herokuapp.com/?input='+inputCode,
@@ -162,18 +109,6 @@
 	  return xhr;
 	}
 
-    // myscriptTextWeb.addEventListener('convert', () => {
-    //     alert(JSON.stringify(event.detail));
-    //     // alert("hey");
-    // });
-    // myscriptTextWeb.addEventListener('converted', (event) => {
-    //     toast.textContent = `Recognition object contains : ${JSON.stringify(event.detail)}`;
-    //     var json = JSON.parse(JSON.stringify(event.detail));
-    //     var exports = json.exports;
-    //     var bs = JSON.parse(exports["application/vnd.myscript.jiix"]);
-    //     var myThing = bs["label"];
-    //     alert(myThing);
-    // });
 </script>
 </body>
 
