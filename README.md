@@ -5,7 +5,8 @@ The **_JAVARecognizer_** is a JAVA handwritten-code recognizer.
 It provides the user with the following feautures:  
 * Digital handwriting input capture
 * Handwriting recognition
-* JAVA code checking
+* JAVA code checking  
+  
 ```URL of the app: https://write2codejavarecognizer.firebaseapp.com```
 # Requirements
 The recognizer component was built using the following technologies:
