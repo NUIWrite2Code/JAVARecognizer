@@ -15,13 +15,13 @@ The recognizer component was built using the following technologies:
   * and to process the responses coming from it. 
   * The code is recognized and operational through the web browser.
 * Main technologies and libraries:
-	* [**MyScript**](https://developer.myscript.com/docs/interactive-ink/1.3/overview/about/):
+  * [**MyScript**](https://developer.myscript.com/docs/interactive-ink/1.3/overview/about/):
     * [**MyScript Interactive Ink SDK**](https://developer.myscript.com/docs/interactive-ink/1.3/overview/about/) is a set of graphical libraries and server APIs provided by MyScript to help developers build applications that require digital handwriting recognition. All recognition operations are processed on the MyScript Server with WebSocket used as the communication protocol.
-	  * On the client side, we use the [**myscript-text-web**](https://github.com/MyScript/myscript-text-web) module to capture digital handwriting input and handle the communication with the server.
-	* **HTML**: Stands for Hyper-Text Markup Language, and is used to give structure and order to the elements that will appear in the client through the web browser.
-	* **CSS**: Stands for Cascading Style Sheets, and its used to control the style of the webpage and to determine how HTML elements are to be displayed.
-	* **NodeJS**: Javascript runtime environment used to bring the features of Javascript language to backend, or in other words, outside of the web browser. Myscript and Polymer-CLI are supported with NodeJS.
-	* [**Polymer-CLI**](https://polymer-library.polymer-project.org/3.0/docs/tools/polymer-cli): Library used to create custom elements used as DOM elements in the web pages of the GUI. This technology was used following the implementation recommendation given by MyScript documentation and its community of developers.
+    * On the client side, we use the [**myscript-text-web**](https://github.com/MyScript/myscript-text-web) module to capture digital handwriting input and handle the communication with the server.
+  * **HTML**: Stands for Hyper-Text Markup Language, and is used to give structure and order to the elements that will appear in the client through the web browser.
+  * **CSS**: Stands for Cascading Style Sheets, and its used to control the style of the webpage and to determine how HTML elements are to be displayed.
+  * **NodeJS**: Javascript runtime environment used to bring the features of Javascript language to backend, or in other words, outside of the web browser. Myscript and Polymer-CLI are supported with NodeJS.
+  * [**Polymer-CLI**](https://polymer-library.polymer-project.org/3.0/docs/tools/polymer-cli): Library used to create custom elements used as DOM elements in the web pages of the GUI. This technology was used following the implementation recommendation given by MyScript documentation and its community of developers.
   * The recognizer was deployed using [**Firebase Hosting**](https://firebase.google.com/products/hosting), which is a SaaS (Software as a Service) Cloud service to host and deploy web and mobile applications. 
 # Configuration
 The configuration followed the steps indicated in the following link: https://polymer-library.polymer-project.org/2.0/docs/toolbox/deploy
