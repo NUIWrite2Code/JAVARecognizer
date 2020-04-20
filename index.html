@@ -1,115 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <!-- Those meta make the capture of handwriting inputs easier on mobile devices -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="HandheldFriendly" content="true"/>
+    <head>
+        <!-- Those meta make the capture of handwriting inputs easier on mobile devices -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="HandheldFriendly" content="true"/>
 
-    <title>Write2Code</title>
-
-    <link rel="stylesheet" href="node_modules/myscript-text-web/src/demo-app/examples/examples.css">
-
-    <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script type="module" src="node_modules/myscript-text-web/myscript-text-web.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-</head>
-
-<body>
-<!-- Please change applicationkey and hmackey below with those send by mail during your registration. You can re-access them by connecting to your dashboard at developer.myscript.com with your myscript account -->
-<h1>Write2Code - A Java Handwritten-Code Recognizer</h1>
-<p><b>Use the canvas to write a JAVA method that receives two integer numbers, x and y, and returns the division of them (x divided by y)</b></p>
-<nav>
-    <button class="classic-btn" onclick="myscriptTextWeb.undo()">Undo</button>
-    <button class="classic-btn" onclick="myscriptTextWeb.redo()">Redo</button>
-    <button class="classic-btn" onclick="myscriptTextWeb.clear()">Clear</button>
-    <button class="classic-btn" onclick="myscriptTextWeb.export_()">Recognize</button> <!-- Give feedback to the user on its code and how recognizable it is (?) -->
-    <button class="classic-btn" onclick="myscriptTextWeb.convert()">Digitalize</button>
-    <button class="classic-btn" onclick="connectToChecker()">Check</button> <!-- Send this to the checker WS -->
-</nav>
-<h2>&nbsp;</h2>
-<myscript-text-web scheme="https"
-                   host="webdemoapi.myscript.com"
-                   applicationKey='5967e3b4-3b59-442c-b645-13798ade6174'
-                   hmacKey='e0ff971c-10b9-4dfe-9c81-b4a0ed53394f'
-                   ondemand
-                   disablecontrols
-                   touch-action="none">            
-</myscript-text-web>
-
-<script>
-    
-    const myscriptTextWeb = document.querySelector('myscript-text-web');
-    var myThing;
-
-    myscriptTextWeb.addEventListener('exported', (event) => {
-        var json = JSON.parse(JSON.stringify(event.detail));
-        var exports = json.exports;
-        var bs = JSON.parse(exports["application/vnd.myscript.jiix"]);
-        myThing = bs["label"];
-        //connectToChecker(myThing);
-	});
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 
-    function connectToChecker()
-    {
-        var inputCode = myThing;
-		$.ajax({
-		    //url: 'https://checkerws.herokuapp.com/?input=public class',
-            url: 'https://checkerws.herokuapp.com/?input='+inputCode,
-		    //url: 'http://127.0.0.1:9000/',
-		    type: 'POST',
-		    //data: '?input=' + inputCode, // or $('#myform').serializeArray()
-		    crossDomain: false,
+        <title>Write2Code</title>
 
-		    beforeSend: function(client){
-		    	client.withCredentials = true;
-		    },
+        <link rel="stylesheet" href="node_modules/myscript-text-web/src/demo-app/examples/examples.css">
 
-		    success: function(result, status, jqXHR) { 
-                //alert("INSIDE: " + inputCode);
-                alert("Here is your feedback: \n" + result);
-            },
+        <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+        <script type="module" src="node_modules/myscript-text-web/myscript-text-web.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-		    error: function (request, status, error) {
-		        alert(status);
-		    }
-		});
-		
+        <style>
+            .margin-left{
+              
+              margin-left: 5px;
+            }
+        </style>
+    </head>
 
-    }
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>
+                        Write2Code - A Java Handwritten-Code Recognizer
+                    </h1>
+                    <p>
+                        <b>Use the canvas to write a JAVA method that receives two integer numbers, x and y, and returns the division of them (x divided by y)</b>
+                    </p>
+                    <div class="btn-toolbar">
+                         
+                        <button class="classic-btn" onclick="myscriptTextWeb.undo()">Undo</button>
+                        <button class="classic-btn margin-left" onclick="myscriptTextWeb.redo()">Redo</button>
+                        <button class="classic-btn margin-left"onclick="deleteContent()">Clear</button>
+                        <button class="classic-btn margin-left" onclick="myscriptTextWeb.export_()">Recognize</button>
+                        <button class="classic-btn margin-left" onclick="convert()">Digitalize</button>
+                        <button class="classic-btn margin-left" onclick="connectToChecker()">Check</button>
+                    </div>
+                    <div class="row" style="height: 520px">
+                        <div class="col-md-8">
+                            <!-- Please change applicationkey and hmackey below with those send by mail during your registration. You can re-access them by connecting to your dashboard at developer.myscript.com with your myscript account -->
+                            <myscript-text-web scheme="https"
+                               host="webdemoapi.myscript.com"
+                               applicationKey='5967e3b4-3b59-442c-b645-13798ade6174'
+                               hmacKey='e0ff971c-10b9-4dfe-9c81-b4a0ed53394f'
+                               ondemand
+                               disablecontrols
+                               touch-action="none">            
+                            </myscript-text-web>
+                        </div>
+                        <div class="col-md-4">
+                            <h2>
+                                Digitalized Input:
+                            </h2>
+                            <div class="row overflow-auto" style="height: 50%; border: thick solid #0275d8; border-radius: 25px;">
+                                <h3 id="checkerInput" style="margin: 5px;">
+                                    <b></b>
+                                </h3>
+                            </div>
+                            <h2>&nbsp</h2>
+                            <h2>
+                                Compiled Output:
+                            </h2>
+                            <div class="row overflow-auto" style="height: 50%; border: thick solid #0275d8; border-radius: 25px;">
+                                <h3 id="checkerFeedback" style="margin: 5px;">
+                                    <b></b>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    </body>
+    <script>
+        
+        const myscriptTextWeb = document.querySelector('myscript-text-web');
+        var myThing;
 
-    function createCORSRequest(method, url) {
-	  var xhr = new XMLHttpRequest();
-	  if ("withCredentials" in xhr) {
+        myscriptTextWeb.addEventListener('exported', (event) => {
+            var json = JSON.parse(JSON.stringify(event.detail));
+            var exports = json.exports;
+            var bs = JSON.parse(exports["application/vnd.myscript.jiix"]);
+            myThing = bs["label"];
+            //connectToChecker(myThing);
+        });
 
-	    // Check if the XMLHttpRequest object has a "withCredentials" property.
-	    // "withCredentials" only exists on XMLHTTPRequest2 objects.
-	    xhr.open(method, url, true);
-	    alert(xhr.response)
 
-	  } else if (typeof XDomainRequest != "undefined") {
+        function connectToChecker()
+        {
+            var inputCode = myThing;
+            $.ajax({
+                //url: 'https://checkerws.herokuapp.com/?input=public class',
+                url: 'https://checkerws.herokuapp.com/?input='+inputCode,
+                //url: 'http://127.0.0.1:9000/',
+                type: 'POST',
+                //data: '?input=' + inputCode, // or $('#myform').serializeArray()
+                crossDomain: false,
 
-	    // Otherwise, check if XDomainRequest.
-	    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-	    xhr = new XDomainRequest();
-	    xhr.open(method, url);
+                beforeSend: function(client){
+                    client.withCredentials = true;
+                },
 
-	     alert("Hates Pedro")
+                success: function(result, status, jqXHR) { 
+                    //alert("INSIDE: " + inputCode);
+                    var checkerMsg = result;
+                    checkerMsg = checkerMsg.replace(/</g, "&lt;");
+                    document.getElementById("checkerFeedback").innerHTML = '<font size="large">'+checkerMsg+ '</font>';
+                },
 
-	  } else {
+                error: function (request, status, error) {
+                    alert(status);
+                }
+            });
+            
 
-	    // Otherwise, CORS is not supported by the browser.
-	    xhr = null;
+        }
 
-	  }
-	  return xhr;
-	}
+        function deleteContent()
+        {
+            myscriptTextWeb.clear();
+            document.getElementById("checkerFeedback").innerHTML = " ";
+            document.getElementById("checkerInput").innerHTML = " ";
+        }
 
-</script>
-</body>
+        function convert()
+        {
+            //myscriptTextWeb.convert();
+            document.getElementById("checkerInput").innerHTML = '<font size="large">'+myThing+ '</font>';
+
+        }
+
+        function createCORSRequest(method, url) {
+          var xhr = new XMLHttpRequest();
+          if ("withCredentials" in xhr) {
+
+            // Check if the XMLHttpRequest object has a "withCredentials" property.
+            // "withCredentials" only exists on XMLHTTPRequest2 objects.
+            xhr.open(method, url, true);
+            alert(xhr.response)
+
+          } else if (typeof XDomainRequest != "undefined") {
+
+            // Otherwise, check if XDomainRequest.
+            // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+
+          } else {
+
+            // Otherwise, CORS is not supported by the browser.
+            xhr = null;
+
+          }
+          return xhr;
+        }
+
+    </script>
+    </body>
 
 </html>
