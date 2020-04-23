@@ -44,7 +44,7 @@
                         <button class="classic-btn" onclick="myscriptTextWeb.undo()">Undo</button>
                         <button class="classic-btn margin-left" onclick="myscriptTextWeb.redo()">Redo</button>
                         <button class="classic-btn margin-left"onclick="deleteContent()">Clear</button>
-                        <button class="classic-btn margin-left" onclick="myscriptTextWeb.export_()">Recognize</button>
+                        <button class="classic-btn margin-left" onclick="recognize()">Recognize</button>
                         <button class="classic-btn margin-left" onclick="convert()">Digitalize</button>
                         <button class="classic-btn margin-left" onclick="connectToChecker()">Check</button>
                     </div>
@@ -99,9 +99,15 @@
             //connectToChecker(myThing);
         });
 
+        function recognize()
+        {
+            myscriptTextWeb.convert();
+            myscriptTextWeb.export_()
+        }
 
         function connectToChecker()
         {
+            myThing = myThing.replace(/\n/g, '<br/>');
             var inputCode = myThing;
             $.ajax({
                 //url: 'https://checkerws.herokuapp.com/?input=public class',
@@ -119,6 +125,10 @@
                     //alert("INSIDE: " + inputCode);
                     var checkerMsg = result;
                     checkerMsg = checkerMsg.replace(/</g, "&lt;");
+                    var elems = checkerMsg.split(":");
+                    var fst = "<b>" + elems[0] +": </b>";
+                    var snd = elems[1];
+                    checkerMsg = fst + snd;
                     document.getElementById("checkerFeedback").innerHTML = '<font size="large">'+checkerMsg+ '</font>';
                 },
 
@@ -139,34 +149,10 @@
 
         function convert()
         {
-            //myscriptTextWeb.convert();
+            myscriptTextWeb.convert();
+            myThing = myThing.replace(/\n/g, '<br/>');
             document.getElementById("checkerInput").innerHTML = '<font size="large">'+myThing+ '</font>';
 
-        }
-
-        function createCORSRequest(method, url) {
-          var xhr = new XMLHttpRequest();
-          if ("withCredentials" in xhr) {
-
-            // Check if the XMLHttpRequest object has a "withCredentials" property.
-            // "withCredentials" only exists on XMLHTTPRequest2 objects.
-            xhr.open(method, url, true);
-            alert(xhr.response)
-
-          } else if (typeof XDomainRequest != "undefined") {
-
-            // Otherwise, check if XDomainRequest.
-            // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-            xhr = new XDomainRequest();
-            xhr.open(method, url);
-
-          } else {
-
-            // Otherwise, CORS is not supported by the browser.
-            xhr = null;
-
-          }
-          return xhr;
         }
 
     </script>
